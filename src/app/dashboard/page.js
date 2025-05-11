@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Page = async () => {
   try {
-    const { data } = await axios.get("https://newsapi.org/v2/top-headline", {
+    const { data } = await axios.get("https://newsapi.org/v2/top-headlines", {
       params: {
         country: "us",
       },
