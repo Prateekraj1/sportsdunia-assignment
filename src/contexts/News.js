@@ -45,7 +45,7 @@ export const NewsProvider = ({ children, initialArticles }) => {
   }, [initialArticles]);
 
   return (
-    <NewsContext.Provider value={{ articles, status, error }}>
+    <NewsContext.Provider value={{ articles, status, error, setArticles, setStatus, setError }}>
       {children}
     </NewsContext.Provider>
   );

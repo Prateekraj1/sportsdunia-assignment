@@ -16,7 +16,6 @@ const Dashboard = () => {
 
   const [search, setSearch] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
-  const [dateRange, setDateRange] = useState({ start: "", end: "" });
 
   useEffect(() => {
     let result = articles;
@@ -27,16 +26,8 @@ const Dashboard = () => {
           a.author?.toLowerCase().includes(search.toLowerCase())
       );
     }
-    if (dateRange.start && dateRange.end) {
-      const start = new Date(dateRange.start);
-      const end = new Date(dateRange.end);
-      result = result.filter((a) => {
-        const published = new Date(a.publishedAt);
-        return published >= start && published <= end;
-      });
-    }
     setFilteredArticles(result);
-  }, [articles, search, dateRange]);
+  }, [articles, search]);
 
   const totalPayout = filteredArticles.length * 10;
   const chartData = filteredArticles.reduce((acc, item) => {
@@ -65,8 +56,6 @@ const Dashboard = () => {
         <SearchFilters
           search={search}
           setSearch={setSearch}
-          dateRange={dateRange}
-          setDateRange={setDateRange}
         />
 
         <ChartWrapper chartArray={chartArray} />
