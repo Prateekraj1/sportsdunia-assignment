@@ -9,10 +9,11 @@ import SearchFilters from "./SearchFilters";
 import ExportButtons from "./ExportButtons";
 import ChartWrapper from "./ChartWrapper";
 import ArticleList from "./ArticleList";
+import ErrorPage from "../common/ErrorPage";
 
 const Dashboard = () => {
   const { isLoggedInUser } = useUser();
-  const { articles, status: articleStatus, error } = useNews();
+  const { articles, status: articleStatus } = useNews();
 
   const [search, setSearch] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
@@ -49,11 +50,7 @@ const Dashboard = () => {
     count,
   }));
 
-  if (articleStatus === "loading")
-    return <p className="text-center">Loading...</p>;
-
-  if (error)
-    return <p className="text-center text-red-500">{error}</p>;
+  if (articleStatus === "failed") return <ErrorPage />;
   return (
     <>
 
