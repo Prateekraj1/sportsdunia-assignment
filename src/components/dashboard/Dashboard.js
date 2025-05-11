@@ -12,7 +12,7 @@ import ArticleList from "./ArticleList";
 
 const Dashboard = () => {
   const { isLoggedInUser } = useUser();
-  const { articles, status: articleStatus } = useNews();
+  const { articles, status: articleStatus, error } = useNews();
 
   const [search, setSearch] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
@@ -52,8 +52,11 @@ const Dashboard = () => {
   if (articleStatus === "loading")
     return <p className="text-center">Loading...</p>;
 
+  if (error)
+    return <p className="text-center text-red-500">{error}</p>;
   return (
     <>
+
       {isLoggedInUser ? (
         <div className="p-4 sm:p-6 md:p-8 bg-gray-100 dark:bg-gray-900 transition-colors overflow-hidden min-h-[100dvh]">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

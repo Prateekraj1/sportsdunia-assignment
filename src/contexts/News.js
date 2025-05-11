@@ -1,10 +1,12 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
+
 const NewsContext = createContext();
 
 export const NewsProvider = ({ children, initialArticles }) => {
   const [articles, setArticles] = useState(initialArticles || []);
   const [status, setStatus] = useState("loading");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const updateStatusAndCache = () => {
@@ -29,8 +31,16 @@ export const NewsProvider = ({ children, initialArticles }) => {
     }
   }, [articles]);
 
+  useEffect(() => {
+    if (status === "failed") {
+      setError("Failed to load news. Please try again later.");
+    }
+  }, [status]);
+
   return (
-    <NewsContext.Provider value={{ articles, status }}>
+    <NewsContext.Provider
+      value={{ articles, status, error, setArticles, setStatus, setError }}
+    >
       {children}
     </NewsContext.Provider>
   );
