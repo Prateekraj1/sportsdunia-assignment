@@ -1,27 +1,45 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+} from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { minLengthMessage, requiredMessage, validateEmail } from "@/helpers/validationFunction";
+import {
+    minLengthMessage,
+    requiredMessage,
+    validateEmail,
+} from "@/helpers/validationFunction";
 import ErrorLabel from "../common/form/ErrorLabel";
 import InputGroup from "../common/form/InputGroup";
 import InputLabel from "../common/form/InputLabel";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 function Login() {
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
     } = useForm({ mode: "all" });
+
+    const router = useRouter();
 
     const onSubmit = async ({ email, password }) => {
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            toast.success("Logged in successfully!", { position: "top-center" });
-            window.location.href = "/dashboard";
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            const token = await userCredential.user.getIdToken();
+            setCookie("token", token);
+            toast.success("Login successful!", { position: "top-center" });
+            router.push("/dashboard");
         } catch (error) {
             toast.error(error.message, { position: "top-center" });
         }
@@ -30,19 +48,23 @@ function Login() {
     const handleGoogleLogin = async () => {
         const provider = new GoogleAuthProvider();
         try {
-            await signInWithPopup(auth, provider);
-            toast.success("Google sign-in successful!", { position: "top-center" });
-            window.location.href = "/dashboard";
+            const result = await signInWithPopup(auth, provider);
+            const token = await result.user.getIdToken();
+            setCookie("token", token);
+
+            toast.success("sign-in successful!", { position: "top-center" });
+            router.push("/dashboard");
         } catch (error) {
             toast.error(error.message, { position: "top-center" });
         }
     };
+
     const validationRules = {
         email: {
             required: requiredMessage(),
             validate: (value) => {
                 return validateEmail(value);
-            }
+            },
         },
         password: {
             required: requiredMessage(),
@@ -66,7 +88,11 @@ function Login() {
                         placeholder="Enter your email"
                         {...register("email", validationRules.email)}
                     />
-                    {errors.email && <ErrorLabel className=" text-sm mt-1">{errors.email.message}</ErrorLabel>}
+                    {errors.email && (
+                        <ErrorLabel className=" text-sm mt-1">
+                            {errors.email.message}
+                        </ErrorLabel>
+                    )}
                 </InputGroup>
                 <InputGroup>
                     <InputLabel id="password">Password </InputLabel>
@@ -76,7 +102,11 @@ function Login() {
                         placeholder="Enter your password"
                         {...register("password", validationRules.password)}
                     />
-                    {errors.password && <ErrorLabel className=" text-sm mt-1">{errors.password.message}</ErrorLabel>}
+                    {errors.password && (
+                        <ErrorLabel className=" text-sm mt-1">
+                            {errors.password.message}
+                        </ErrorLabel>
+                    )}
                 </InputGroup>
 
                 <button
@@ -95,7 +125,10 @@ function Login() {
             </button>
 
             <p className="text-center">
-                New user? <a href="/register" className="text-blue-500">Register here</a>
+                New user?{" "}
+                <a href="/register" className="text-blue-500">
+                    Register here
+                </a>
             </p>
         </div>
     );

@@ -12,7 +12,6 @@ import ArticleList from "./ArticleList";
 import ErrorPage from "../common/ErrorPage";
 
 const Dashboard = () => {
-  const { isLoggedInUser } = useUser();
   const { articles, status: articleStatus } = useNews();
 
   const [search, setSearch] = useState("");
@@ -53,43 +52,36 @@ const Dashboard = () => {
   if (articleStatus === "failed") return <ErrorPage />;
   return (
     <>
-
-      {isLoggedInUser ? (
-        <div className="p-4 sm:p-6 md:p-8 bg-gray-100 dark:bg-gray-900 transition-colors overflow-hidden min-h-[100dvh]">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <DashboardHeader />
-          </div>
-
-          <DashboardCards
-            articlesCount={filteredArticles.length}
-            totalPayout={totalPayout}
-          />
-
-          <SearchFilters
-            search={search}
-            setSearch={setSearch}
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-          />
-
-          <ChartWrapper chartArray={chartArray} />
-
-          <ExportButtons articles={filteredArticles} />
-
-          <ArticleList articles={filteredArticles} />
-
-          <div className="my-6 overflow-x-auto">
-            <h2 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
-              💵 Payout Table
-            </h2>
-            <Payout articles={filteredArticles} />
-          </div>
+      <div className="p-4 sm:p-6 md:p-8 bg-gray-100 dark:bg-gray-900 transition-colors overflow-hidden min-h-[100dvh]">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <DashboardHeader />
         </div>
-      ) : (
-        <p className="text-center text-red-500">
-          Please sign in to view dashboard.
-        </p>
-      )}
+
+        <DashboardCards
+          articlesCount={filteredArticles.length}
+          totalPayout={totalPayout}
+        />
+
+        <SearchFilters
+          search={search}
+          setSearch={setSearch}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+        />
+
+        <ChartWrapper chartArray={chartArray} />
+
+        <ExportButtons articles={filteredArticles} />
+
+        <ArticleList articles={filteredArticles} />
+
+        <div className="my-6 overflow-x-auto">
+          <h2 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
+            💵 Payout Table
+          </h2>
+          <Payout articles={filteredArticles} />
+        </div>
+      </div>
     </>
   );
 };
