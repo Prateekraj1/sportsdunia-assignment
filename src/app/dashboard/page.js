@@ -1,23 +1,20 @@
 import Dashboard from "@/components/dashboard/Dashboard";
 import { NewsProvider } from "@/contexts/News";
+import axios from "axios";
 
 const Page = async () => {
   let articles = [];
 
   try {
-    const res = await fetch("https://newsapi.org/v2/top-headlines?country=us", {
+    const response = await axios.get("https://newsapi.org/v2/top-headlines", {
+      params: { country: "in" },
       headers: {
         "X-Api-Key": process.env.NEXT_PUBLIC_NEWS_API_KEY,
       },
-      next: { revalidate: 3600 }, // optional caching
     });
 
-    if (!res.ok) throw new Error("News API failed");
-
-    const data = await res.json();
-    articles = data.articles || [];
-  } catch (err) {
-    // Let client decide fallback
+    articles = response.data.articles || [];
+  } catch (error) {
     articles = [];
   }
 

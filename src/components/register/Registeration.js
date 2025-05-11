@@ -8,7 +8,12 @@ import { useRouter } from "next/navigation";
 import InputGroup from "../common/form/InputGroup";
 import InputLabel from "../common/form/InputLabel";
 import ErrorLabel from "../common/form/ErrorLabel";
-import { minLengthMessage, requiredMessage, validateEmail } from "@/helpers/validationFunction";
+import {
+  minLengthMessage,
+  requiredMessage,
+  validateEmail,
+} from "@/helpers/validationFunction";
+import { setCookie } from "cookies-next";
 
 const Register = () => {
   const router = useRouter();
@@ -49,6 +54,10 @@ const Register = () => {
         password
       );
       await updateProfile(userCredential.user, { displayName: name });
+
+      const token = await userCredential.user.getIdToken();
+      setCookie("token", token);
+
       toast.success("Registered successfully");
       router.push("/dashboard");
     } catch (error) {
@@ -86,7 +95,7 @@ const Register = () => {
           <input
             type="password"
             placeholder="Write your password"
-            {...register("password",validationRules.password)}
+            {...register("password", validationRules.password)}
             className="mb-4 p-2 border rounded w-full"
           />
           {errors.password && (
