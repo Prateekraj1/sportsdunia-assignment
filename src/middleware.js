@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 
-const getJwtTokenFromCookie = (cookies) => {
+const getTokenFromCookie = (cookies) => {
   const token = cookies.get('token');
   console.log(token);
   return token ? token : null;
@@ -12,14 +11,14 @@ export async function middleware(req) {
   const cookies = req.cookies;
 
   if (pathname.startsWith('/dashboard')) {
-    const token = getJwtTokenFromCookie(cookies);
+    const token = getTokenFromCookie(cookies);
     if (!token) {
       return NextResponse.redirect(new URL('/login', req.url));
     }
   }
 
   if (pathname === '/login' || pathname === '/register') {
-    const token = getJwtTokenFromCookie(cookies); 
+    const token = getTokenFromCookie(cookies); 
     if (token) {
       try {
         return NextResponse.redirect(new URL('/dashboard', req.url));
