@@ -66,6 +66,7 @@ This project is a responsive dashboard that integrates news and blog data, inclu
 - **React.js** and **Next.js** for development.
 - **Tailwind CSS** for styling.
 - **Context API** for state management.
+- **React hook form** for form management.
 
 ## Key Features:
 1. **Dashboard**:

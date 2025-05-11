@@ -9,6 +9,7 @@ import SearchFilters from "./SearchFilters";
 import ExportButtons from "./ExportButtons";
 import ChartWrapper from "./ChartWrapper";
 import ArticleList from "./ArticleList";
+import ErrorPage from "../common/ErrorPage";
 
 const Dashboard = () => {
   const { isLoggedInUser } = useUser();
@@ -49,11 +50,10 @@ const Dashboard = () => {
     count,
   }));
 
-  if (articleStatus === "loading")
-    return <p className="text-center">Loading...</p>;
-
+  if (articleStatus === "failed") return <ErrorPage />;
   return (
     <>
+
       {isLoggedInUser ? (
         <div className="p-4 sm:p-6 md:p-8 bg-gray-100 dark:bg-gray-900 transition-colors overflow-hidden min-h-[100dvh]">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
