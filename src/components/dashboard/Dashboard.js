@@ -13,6 +13,7 @@ import ErrorPage from "../common/ErrorPage";
 
 const Dashboard = () => {
   const { articles, status: articleStatus } = useNews();
+  const [payoutRate, setPayoutRate] = useState(10);
 
   const [search, setSearch] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
@@ -29,7 +30,7 @@ const Dashboard = () => {
     setFilteredArticles(result);
   }, [articles, search]);
 
-  const totalPayout = filteredArticles.length * 10;
+  const totalPayout = filteredArticles.length * payoutRate;
   const chartData = filteredArticles.reduce((acc, item) => {
     const author = item.author || "Unknown";
     acc[author] = (acc[author] || 0) + 1;
@@ -68,7 +69,7 @@ const Dashboard = () => {
           <h2 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
             💵 Payout Table
           </h2>
-          <Payout articles={filteredArticles} />
+          <Payout articles={filteredArticles} setPayoutRate={setPayoutRate} payoutRate={payoutRate} />
         </div>
       </div>
     </>

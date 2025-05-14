@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
-const Payout = ({ articles }) => {
-  const [payoutRate, setPayoutRate] = useState(10);
+const Payout = ({ articles, payoutRate, setPayoutRate }) => {
   const [localArticles, setLocalArticles] = useState([]);
 
   useEffect(() => {
